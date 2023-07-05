@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.BlogMapper">
+
+	
+    <!-- user_table -->
+	 <!-- <select id="user" resultType="mybatis.VO">
+		select * from CUST_TABLE order by user_id
+	</select> -->
+
+	<select id="userOne" parameterType="String"
+		resultType="mybatis.VO">
+		select * from CUST_TABLE where user_id = #{user_id}
+	</select> 
+
+	<select id="userpwf" parameterType="mybatis.VO"
+		resultType="mybatis.VO">
+		select * from CUST_TABLE where user_id = #{user_id} and user_phone = #{user_phone}
+	</select> 
+
+	<select id="idf" parameterType="String"
+		resultType="mybatis.VO">
+		select * from CUST_TABLE where user_phone = #{user_phone}
+	</select> 
+
+	<insert id="userIns" parameterType="mybatis.VO">
+		insert into CUST_TABLE(user_id, user_phone, user_password, join_date, point)
+		values(#{user_id}, #{user_phone}, #{user_password}, #{join_date}, #{point})
+	</insert>
+
+	<delete id="userDel" parameterType="String">
+		delete from CUST_TABLE where user_id = #{user_id}
+	</delete>
+	
+	<update id="userUp"  parameterType="mybatis.VO">
+	 update cust_table set (ticket_id, TICKET_BUY_NUM) = (SELECT TICKET_ID, BUY_NUM FROM TICKET_BUY
+     WHERE BUY_NUM = (SELECT MAX(BUY_NUM) FROM  TICKET_BUY WHERE USER_ID = #{user_id}))
+     where CUST_TABLE.USER_ID = #{user_id}</update>
+	
+	<!-- 
+	<update id="userUp" parameterType="mybatis.VO">
+		
+	</update>
+	 -->
+	
+	<!-- qa -->
+	 <select id="userqa_all" resultType="mybatis.VO_qa">
+		select * from qa order by q_time desc
+	</select>  
+	 
+	<insert id="userqa" parameterType="mybatis.VO_qa">
+		insert into qa(qa_num ,user_id, q_time, q_title, q_content)
+		values(seq_qa_num.nextval, #{user_id}, #{q_time}, #{q_title}, #{q_content})
+	</insert>
+
+	<delete id="qaDel" parameterType="String">
+		delete from qa where qa_num = #{qa_num}
+	</delete> 
+	
+	<update id="qaUp" parameterType="mybatis.VO_qa">
+		update qa
+		set q_title = #{q_title}, q_content = #{q_content}, q_time = #{q_time} where qa_num = #{qa_num}
+	</update>
+	
+	<!-- notice -->
+	 <select id="usernotice_all" resultType="mybatis.VO_notice">
+		select * from notice order by not_time desc
+	</select>  
+	
+	<!-- point -->
+	<!-- <select id="p_One" parameterType="String"
+		resultType="mybatis.VO_point">
+		select * from point where p_attribute = #{p_attribute} order by charge_date desc
+	</select>  -->
+	
+	<select id="p_All" parameterType="String"
+		resultType="mybatis.VO_point">
+		select * from point where p_attribute = #{p_attribute} order by charge_date 
+	</select> 
+	
+	<insert id="p_Ins" parameterType="mybatis.VO_point">
+		insert into point(point_num ,user_id, point, p_attribute, charge_date)
+		values(seq_point_point_num.nextval, #{user_id}, #{point}, #{p_attribute}, #{charge_date})
+	</insert>
+	
+	<!-- ticket -->
+	
+	<select id="t_All" parameterType="String"
+		resultType="mybatis.VO_ticketbuy">
+		select * from ticket_buy where user_id = #{user_id} order by buy_date 
+	</select> 
+	
+	<delete id="t_refund" parameterType="String">
+		delete from ticket_buy where buy_num = #{buy_num}
+	</delete> 
+	
+	
+	<insert id="t_Ins" parameterType="mybatis.VO_ticketbuy">
+		insert into ticket_buy(buy_num ,user_id, ticket_id, price, buy_date)
+		values(seq_ticket_buy_num.nextval, #{user_id}, #{ticket_id}, #{price}, #{buy_date})
+	</insert>	
+	
+	
+	<select id="tOne" parameterType="String"
+		resultType="mybatis.VO_ticketbuy">
+		select * from ticket_buy where buy_num = #{BUY_NUM} order by buy_num
+	</select> 
+	
+</mapper>
